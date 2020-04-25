@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import './styles/tailwind.css';
 import * as serviceWorker from './serviceWorker';
+import { CalculatorContainer } from './CalculatorContainer';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <CalculatorContainer />
   </React.StrictMode>,
   document.getElementById('root')
 );

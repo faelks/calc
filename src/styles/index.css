@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.h-128 {
+  height: 32rem;
+}
+
+.h-160 {
+  height: 40rem;
+}
+
+.w-96 {
+  width: 24rem; 
+}
