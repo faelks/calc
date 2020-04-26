@@ -39,14 +39,14 @@ const calculatorActions = [
     name: "negate",
     symbol: "+/-",
     description: "negate the sign of the current input value",
-    func: "noop",
+    func: "negate",
     args: null,
   },
   {
     name: "parenthesis",
     symbol: "()",
     description: "add opening and closing parenthesis",
-    func: "noop",
+    func: "addParenthesis",
     args: null,
   },
   {
@@ -81,7 +81,7 @@ const calculatorActions = [
     name: "percentage",
     symbol: "%",
     description: "convert the current value to percentage form",
-    func: "noop",
+    func: "percent",
     args: null,
   },
   {
@@ -149,12 +149,10 @@ const calculatorActions = [
   },
 ];
 
-
 const calculator = new Calculator();
 
 export const CalculatorContainer = () => {
-  
-  const [input, setInput] = useState("0");
+  const [input, setInput] = useState("");
 
   const handleAction = (action) => {
     calculator[action.func](action.args);
@@ -182,7 +180,7 @@ export const CalculatorContainer = () => {
           <div className="p-4 cursor-pointer">History</div>
           <div
             className="p-4 cursor-pointer"
-            onClick={() => {}}
+            onClick={() => calculator.remove()}
           >
             Remove
           </div>

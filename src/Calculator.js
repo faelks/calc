@@ -33,9 +33,9 @@ const isOperator = (string) => {
 export class Calculator {
   constructor() {
     this.VALID_CHAR_REGEXP = /[\d\(\)\.+-x\/]/;
-    this.expression = "0";
+    this.expression = "";
     this.isCleared = true;
-    this.value = 0;
+    this.value = null;
   }
 
   getExpression() {
@@ -52,6 +52,8 @@ export class Calculator {
 
   operatorGreaterThan(a, b) {
     const operatorPrecedenceMap = {
+      "(": 0,
+      ")": 0,
       "+": 1,
       "-": 1,
       "/": 2,
@@ -60,14 +62,20 @@ export class Calculator {
     return operatorPrecedenceMap[a] > operatorPrecedenceMap[b];
   }
 
-  parseExpression() {
+  parseExpression({ translateSpecial } = { translateSpecial: true }) {
     const tokens = [];
     let current = "";
 
     for (let char of this.expression) {
       if (!isNumber(char)) {
         tokens.push(current);
-        tokens.push(char);
+
+        if (translateSpecial && char === "%") {
+          tokens.push("/", "100");
+        } else {
+          tokens.push(char);
+        }
+
         current = "";
       } else {
         current += char;
@@ -117,8 +125,8 @@ export class Calculator {
           outputQueue.push(lastOperator);
         }
 
-        if (operatorStack[operatorStack.length - 1] !== "(") {
-          // discar the remaining left paren
+        if (operatorStack[operatorStack.length - 1] === "(") {
+          // discard the remaining left paren
           operatorStack.pop();
         }
       }
@@ -134,37 +142,56 @@ export class Calculator {
   }
 
   evaluatePostfix(postfixTokens) {
-    const MAX_ITERATION = 1000;
-    let i = 0;
-    while (postfixTokens.length > 1 && i < MAX_ITERATION) {
-      i++;
-      const firstNum = Number.parseInt(postfixTokens.shift());
-      const secondNum = Number.parseInt(postfixTokens.shift());
-      const operator = postfixTokens.shift();
+    let stack = [];
+    for (let token of postfixTokens) {
+      if (isNumber(token)) {
+        stack.push(token);
+      }
 
-      switch (operator) {
-        case "+":
-          postfixTokens.unshift(firstNum + secondNum);
-          break;
-        case "-":
-          postfixTokens.unshift(firstNum - secondNum);
-          break;
-        case "x":
-          postfixTokens.unshift(firstNum * secondNum);
-          break;
-        case "/":
-          postfixTokens.unshift(firstNum / secondNum);
-          break;
+      if (isOperator(token)) {
+        const a = Number.parseInt(stack.pop());
+        const b = Number.parseInt(stack.pop());
+
+        const operatorToFunctionMap = {
+          "+": (a, b) => a + b,
+          "-": (a, b) => a - b,
+          x: (a, b) => a * b,
+          "/": (a, b) => a / b,
+        };
+
+        stack.push(operatorToFunctionMap[token](b, a));
       }
     }
 
-    return postfixTokens[0];
+    return stack[0];
   }
 
   evaluate() {
     const tokens = this.parseExpression();
     const postfixExpression = this.toPostfix(tokens);
-    this.value = this.evaluatePostfix(postfixExpression);
+
+    // handle implied values, postfix expressions need to
+    // be evaluated in pairs of three so an expression like
+    // '99 -' needs to be converted to '0 99 -' and in the
+    // division / multiplcation case '99 x' -> '1 99 x'
+    if (isOperator(postfixExpression[1])) {
+      if (["+", "-"].includes(postfixExpression[1])) {
+        postfixExpression.unshift(0);
+      }
+
+      if (["x", "/"].includes(postfixExpression[1])) {
+        postfixExpression.unshift(1);
+      }
+    }
+
+    this.value = this.evaluatePostfix([...postfixExpression]);
+
+    if (!this.value) {
+      console.log(
+        `Could not evaluate expression: ${this.expression} tokens: [${tokens}] postfix: [${postfixExpression}]`
+      );
+    }
+
     this.expression = `${this.value}`;
   }
 
@@ -184,6 +211,30 @@ export class Calculator {
     this.expression += "/";
   }
 
+  percent() {
+    this.expression += "%";
+  }
+
+  negate() {
+    if (this.isCleared) {
+      this.expression += "(-";
+      return;
+    }
+
+    const tokens = this.parseExpression({ translateSpecial: false });
+    const lastToken = tokens.pop();
+
+    if (isNumber(lastToken)) {
+      tokens.push("(", "-", lastToken);
+    } else if (isOperator(lastToken)) {
+      tokens.push("(", "-");
+    } else if (lastToken === "%") {
+      tokens.push("x", "(", "-");
+    }
+
+    this.expression = tokens.join("");
+  }
+
   // Accept string or number
   addNumber(num) {
     if (!isNumber(num)) {
@@ -195,9 +246,45 @@ export class Calculator {
   }
 
   clear() {
-    this.value = 0;
-    this.expression = "0";
+    this.value = null;
+    this.expression = "";
     this.isCleared = true;
+  }
+
+  lastExpressionChar() {
+    return this.expression[this.expression.length - 1];
+  }
+
+  hasEvenParens() {
+    const parenCount = {
+      "(": 0,
+      ")": 0,
+    };
+    for (let char of this.expression) {
+      if (char === "(" || char === ")") {
+        parenCount[char]++;
+      }
+    }
+
+    return parenCount["("] === parenCount[")"];
+  }
+
+  addParenthesis() {
+    if (isNumber(this.lastExpressionChar())) {
+      if (this.hasEvenParens()) {
+        this.expression += "(";
+      } else {
+        this.expression += ")";
+      }
+    } else {
+      this.expression += "(";
+    }
+  }
+
+  remove() {
+    if (this.expression) {
+      this.expression = this.expression.substr(0, this.expression.length - 1);
+    }
   }
 
   noop() {}
