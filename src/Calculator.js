@@ -1,34 +1,4 @@
-const removeLeadingChars = (charToRemove, string) => {
-  let result = "";
-  let seenNotMatching = false;
-
-  for (let char of string) {
-    if (seenNotMatching) {
-      result += char;
-    } else {
-      if (char !== charToRemove) {
-        seenNotMatching = true;
-        result += char;
-      }
-    }
-  }
-
-  return result;
-};
-
-const isNumber = (stringOrNumber) => {
-  let number;
-  if (typeof stringOrNumber === "string") {
-    number = Number.parseInt(stringOrNumber);
-  } else {
-    number = stringOrNumber;
-  }
-  return !Number.isNaN(number);
-};
-
-const isOperator = (string) => {
-  return ["+", "-", "x", "/"].includes(string);
-};
+import { removeLeadingChars, isNumber, isOperator } from "./utils";
 
 export class Calculator {
   constructor() {
