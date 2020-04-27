@@ -3,7 +3,7 @@ import { Calculator } from "./Calculator";
 
 const Styles = {
   ActionButton:
-    "bg-white cursor-pointer hover:bg-blue-100 flex justify-center items-center",
+    "bg-100-gray cursor-pointer hover:bg-blue-100 flex justify-center items-center border-t border-l border-400-gray text-2xl font-light tracking-widest",
 };
 
 const calculatorActions = [
@@ -11,6 +11,7 @@ const calculatorActions = [
     name: "clear",
     symbol: "C",
     description: "clears all inputs",
+    classNames: "text-red-400",
     func: "clear",
     args: null,
   },
@@ -18,6 +19,7 @@ const calculatorActions = [
     name: "7",
     symbol: "7",
     description: "adds a seven to the end of input",
+    classNames: "text-gray-700",
     func: "addNumber",
     args: 7,
   },
@@ -25,6 +27,7 @@ const calculatorActions = [
     name: "4",
     symbol: "4",
     description: "adds a four to the end of input",
+    classNames: "text-gray-700",
     func: "addNumber",
     args: 4,
   },
@@ -32,6 +35,7 @@ const calculatorActions = [
     name: "1",
     symbol: "1",
     description: "adds a one to the end of input",
+    classNames: "text-gray-700",
     func: "addNumber",
     args: 1,
   },
@@ -39,6 +43,7 @@ const calculatorActions = [
     name: "negate",
     symbol: "+/-",
     description: "negate the sign of the current input value",
+    classNames: "text-gray-700",
     func: "negate",
     args: null,
   },
@@ -46,6 +51,7 @@ const calculatorActions = [
     name: "parenthesis",
     symbol: "()",
     description: "add opening and closing parenthesis",
+    classNames: "text-blue-500",
     func: "addParenthesis",
     args: null,
   },
@@ -53,6 +59,7 @@ const calculatorActions = [
     name: "8",
     symbol: "8",
     description: "adds an eight to the end of input",
+    classNames: "text-gray-700",
     func: "addNumber",
     args: 8,
   },
@@ -60,6 +67,7 @@ const calculatorActions = [
     name: "5",
     symbol: "5",
     description: "adds a five to the end of input",
+    classNames: "text-gray-700",
     func: "addNumber",
     args: 5,
   },
@@ -67,6 +75,7 @@ const calculatorActions = [
     name: "2",
     symbol: "2",
     description: "adds a two to the end of input",
+    classNames: "text-gray-700",
     func: "addNumber",
     args: 2,
   },
@@ -74,6 +83,7 @@ const calculatorActions = [
     name: "0",
     symbol: "0",
     description: "adds a zero to the end of input",
+    classNames: "text-gray-700",
     func: "addNumber",
     args: 0,
   },
@@ -81,6 +91,7 @@ const calculatorActions = [
     name: "percentage",
     symbol: "%",
     description: "convert the current value to percentage form",
+    classNames: "text-blue-500",
     func: "percent",
     args: null,
   },
@@ -88,6 +99,7 @@ const calculatorActions = [
     name: "9",
     symbol: "9",
     description: "adds a nine to the end of input",
+    classNames: "text-gray-700",
     func: "addNumber",
     args: 9,
   },
@@ -95,6 +107,7 @@ const calculatorActions = [
     name: "6",
     symbol: "6",
     description: "adds a six to the end of input",
+    classNames: "text-gray-700",
     func: "addNumber",
     args: 6,
   },
@@ -102,6 +115,7 @@ const calculatorActions = [
     name: "3",
     symbol: "3",
     description: "adds a three to the end of input",
+    classNames: "text-gray-700",
     func: "addNumber",
     args: 3,
   },
@@ -109,6 +123,7 @@ const calculatorActions = [
     name: "point",
     symbol: ".",
     description: "add a decimal point to the input",
+    classNames: "text-gray-700",
     func: "noop",
     args: null,
   },
@@ -116,6 +131,7 @@ const calculatorActions = [
     name: "divide",
     symbol: "/",
     description: "divide the current value",
+    classNames: "text-blue-500",
     func: "divide",
     args: null,
   },
@@ -123,6 +139,7 @@ const calculatorActions = [
     name: "multiply",
     symbol: "x",
     description: "multiply the current value",
+    classNames: "text-blue-500",
     func: "multiply",
     args: null,
   },
@@ -130,6 +147,7 @@ const calculatorActions = [
     name: "subtract",
     symbol: "-",
     description: "subtract from the current value",
+    classNames: "text-blue-500",
     func: "subtract",
     args: null,
   },
@@ -137,6 +155,7 @@ const calculatorActions = [
     name: "add",
     symbol: "+",
     description: "add to the current value",
+    classNames: "text-blue-500",
     func: "add",
     args: null,
   },
@@ -144,6 +163,7 @@ const calculatorActions = [
     name: "equals",
     symbol: "=",
     description: "calculate the result of the input expression",
+    classNames: "text-white bg-blue-500",
     func: "evaluate",
     args: null,
   },
@@ -166,33 +186,37 @@ export const CalculatorContainer = () => {
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-800">
       <div className="h-160 w-96 flex flex-col border-2 border-gray-800 bg-white shadow-md">
-        <div className="h-48 w-full bg-gray-300 flex justify-center items-center">
+        <div className="h-56 w-full bg-gray-200 flex justify-center items-center">
           <input
             type="text"
             data-testid="calculator-input"
             autoFocus
-            className="w-full bg-gray-300 h-24 text-4xl text-blue-500 outline-none text-right p-4"
+            className="w-full h-full bg-transparent h-24 text-4xl text-blue-500 outline-none text-right px-8"
             value={input}
             onChange={() => {}}
             onKeyDown={handleManualInput}
           ></input>
         </div>
-        <div className="h-16 w-full flex flex-row justify-between bg-gray-300">
-          <div className="p-4 cursor-pointer">History</div>
+        <div className="h-16 w-full flex flex-row justify-between bg-gray-200 px-8 text-gray-600">
+          <div className="flex flex-row items-center space-x-4">
+            <div className="cursor-pointer uppercase">History</div>
+            <p className="cursor-pointer">Ru</p>
+            <p className="cursor-pointer">Signs</p>
+          </div>
           <div
-            className="p-4 cursor-pointer"
+            className="cursor-pointer flex items-center"
             data-testid="action-remove"
             onClick={() => handleAction({ func: "remove" })}
           >
             Remove
           </div>
         </div>
-        <div className="w-full flex-grow grid grid-cols-4 grid-rows-5 grid-flow-col border-2 gap-1 bg-gray-300">
+        <div className="w-full flex-grow grid grid-cols-4 grid-rows-5 grid-flow-col">
           {calculatorActions.map((action) => (
             <div
               key={action.name}
               data-testid={`action-${action.name}`}
-              className={Styles.ActionButton}
+              className={`${Styles.ActionButton} ${action.classNames}`}
               title={action.description}
               onClick={() => handleAction(action)}
             >
