@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Calculator } from "./Calculator";
 import { RulerIcon } from "./RulerIcon";
+import { MathSignIcon } from "./MathSignIcon";
 
 const Styles = {
   ActionButton:
@@ -44,7 +45,7 @@ const calculatorActions = [
     name: "negate",
     symbol: "+/-",
     description: "negate the sign of the current input value",
-    classNames: "text-gray-700",
+    classNames: "text-gray-700 bg-white border-b",
     func: "negate",
     args: null,
   },
@@ -84,7 +85,7 @@ const calculatorActions = [
     name: "0",
     symbol: "0",
     description: "adds a zero to the end of input",
-    classNames: "text-gray-700",
+    classNames: "text-gray-700 border-b bg-white",
     func: "addNumber",
     args: 0,
   },
@@ -124,7 +125,7 @@ const calculatorActions = [
     name: "point",
     symbol: ".",
     description: "add a decimal point to the input",
-    classNames: "text-gray-700",
+    classNames: "text-gray-700 border-b bg-white",
     func: "point",
     args: null,
   },
@@ -164,7 +165,7 @@ const calculatorActions = [
     name: "equals",
     symbol: "=",
     description: "calculate the result of the input expression",
-    classNames: "text-white bg-blue-500",
+    classNames: "text-white bg-blue-500 border-b",
     func: "evaluate",
     args: null,
   },
@@ -205,7 +206,10 @@ export const CalculatorContainer = () => {
               className="cursor-pointer h-6 w-6 text-gray-600"
               onClick={() => console.log("Ruler clicked")}
             />
-            <p className="cursor-pointer">Signs</p>
+            <MathSignIcon
+              className="cursor-pointer h-6 w-6 text-gray-600"
+              onClick={() => console.log("Signs clicked")}
+            />
           </div>
           <div
             className="cursor-pointer flex items-center"
@@ -215,7 +219,7 @@ export const CalculatorContainer = () => {
             Remove
           </div>
         </div>
-        <div className="w-full flex-grow grid grid-cols-4 grid-rows-5 grid-flow-col">
+        <div className="w-full flex-grow grid grid-cols-4 grid-rows-5 grid-flow-col -mb-1">
           {calculatorActions.map((action) => (
             <div
               key={action.name}
