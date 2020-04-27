@@ -277,9 +277,10 @@ export class Calculator {
   }
 
   addParenthesis() {
-    if (isNumber(this.lastExpressionChar())) {
+    const lastChar = this.lastExpressionChar();
+    if (isNumber(lastChar) || lastChar === ")") {
       if (this.hasEvenParens()) {
-        this.expression += "(";
+        this.expression += "x(";
       } else {
         this.expression += ")";
       }

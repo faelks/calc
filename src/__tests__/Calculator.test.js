@@ -53,10 +53,13 @@ it("can use parens", () => {
   calc.add();
   calc.addNumber(1);
   calc.addParenthesis();
+  calc.addParenthesis();
+  calc.addNumber(5);
+  calc.addParenthesis();
 
-  expect(calc.getExpression()).toEqual(`(${someNumber}+1)`);
+  expect(calc.getExpression()).toEqual(`(${someNumber}+1)x(5)`);
   calc.evaluate();
-  expect(calc.getValue()).toEqual(someNumber + 1);
+  expect(calc.getValue()).toEqual((someNumber + 1) * 5);
 });
 
 it("can apply the special percentage action", () => {
