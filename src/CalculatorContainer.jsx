@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Calculator } from "./Calculator";
-import { RulerIcon } from "./RulerIcon";
-import { MathSignIcon } from "./MathSignIcon";
+import { ReactComponent as RemoveIcon } from "./assets/remove-icon-30x30.svg";
+import { ReactComponent as RulerIcon } from "./assets/ruler-icon-30x30.svg";
+import { ReactComponent as MathSignsIcon } from "./assets/math-signs-30x30.svg";
 
 const Styles = {
   ActionButton:
@@ -200,23 +201,23 @@ export const CalculatorContainer = () => {
           ></input>
         </div>
         <div className="h-16 w-full flex flex-row justify-between bg-gray-200 px-8 text-gray-600">
-          <div className="flex flex-row items-center space-x-4">
+          <div className="flex flex-row items-center space-x-6">
             <div className="cursor-pointer uppercase">History</div>
             <RulerIcon
               className="cursor-pointer h-6 w-6 text-gray-600"
               onClick={() => console.log("Ruler clicked")}
             />
-            <MathSignIcon
+            <MathSignsIcon
               className="cursor-pointer h-6 w-6 text-gray-600"
               onClick={() => console.log("Signs clicked")}
             />
           </div>
-          <div
-            className="cursor-pointer flex items-center"
-            data-testid="action-remove"
-            onClick={() => handleAction({ func: "remove" })}
-          >
-            Remove
+          <div className="flex items-center">
+            <RemoveIcon
+              className="cursor-pointer h-8 w-8 text-blue-500"
+              data-testid="action-remove"
+              onClick={() => handleAction({ func: "remove" })}
+            />
           </div>
         </div>
         <div className="w-full flex-grow grid grid-cols-4 grid-rows-5 grid-flow-col -mb-1">
