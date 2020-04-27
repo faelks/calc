@@ -166,19 +166,27 @@ export class Calculator {
   }
 
   add() {
-    this.expression += "+";
+    if (this.canAddOperator()) {
+      this.expression += "+";
+    }
   }
 
   subtract() {
-    this.expression += "-";
+    if (this.canAddOperator()) {
+      this.expression += "-";
+    }
   }
 
   multiply() {
-    this.expression += "x";
+    if (this.canAddOperator()) {
+      this.expression += "x";
+    }
   }
 
   divide() {
-    this.expression += "/";
+    if (this.canAddOperator()) {
+      this.expression += "/";
+    }
   }
 
   percent() {
@@ -223,6 +231,11 @@ export class Calculator {
 
   lastExpressionChar() {
     return this.expression[this.expression.length - 1];
+  }
+
+  canAddOperator() {
+    const lastChar = this.lastExpressionChar();
+    return (!this.isCleared && isNumber(lastChar)) || lastChar === ")";
   }
 
   hasEvenParens() {

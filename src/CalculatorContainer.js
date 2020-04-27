@@ -181,7 +181,8 @@ export const CalculatorContainer = () => {
           <div className="p-4 cursor-pointer">History</div>
           <div
             className="p-4 cursor-pointer"
-            onClick={() => calculator.remove()}
+            data-testid="action-remove"
+            onClick={() => handleAction({ func: "remove" })}
           >
             Remove
           </div>
