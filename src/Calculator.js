@@ -2,18 +2,16 @@ import { removeLeadingChars, isNumber, isOperator } from "./utils";
 
 export class Calculator {
   constructor() {
-    this.VALID_CHAR_REGEXP = /[\d\(\)\.+-x\/]/;
     this.expression = "";
-    this.isCleared = true;
     this.value = null;
   }
 
-  getExpression() {
-    if (this.isCleared) {
-      return this.expression;
-    }
+  isCleared() {
+    return !this.expression;
+  }
 
-    return removeLeadingChars("0", this.expression);
+  getExpression() {
+    return this.expression;
   }
 
   getValue() {
@@ -37,7 +35,9 @@ export class Calculator {
     let current = "";
 
     for (let char of this.expression) {
-      if (!isNumber(char)) {
+      if (isNumber(char) || char === ".") {
+        current += char;
+      } else {
         tokens.push(current);
 
         if (translateSpecial && char === "%") {
@@ -47,8 +47,6 @@ export class Calculator {
         }
 
         current = "";
-      } else {
-        current += char;
       }
     }
 
@@ -119,8 +117,8 @@ export class Calculator {
       }
 
       if (isOperator(token)) {
-        const a = Number.parseInt(stack.pop());
-        const b = Number.parseInt(stack.pop());
+        const a = Number.parseFloat(stack.pop());
+        const b = Number.parseFloat(stack.pop());
 
         const operatorToFunctionMap = {
           "+": (a, b) => a + b,
@@ -194,7 +192,7 @@ export class Calculator {
   }
 
   negate() {
-    if (this.isCleared) {
+    if (this.isCleared()) {
       this.expression += "(-";
       return;
     }
@@ -213,20 +211,42 @@ export class Calculator {
     this.expression = tokens.join("");
   }
 
+  point() {
+    if (this.isCleared()) {
+      this.expression = "0.";
+      return;
+    }
+
+    const lastChar = this.lastExpressionChar();
+    if (isNumber(lastChar)) {
+      this.expression += ".";
+    } else if (isOperator(lastChar) || lastChar === "(") {
+      this.expression += "0.";
+    } else if (lastChar === ")") {
+      this.expression += "x0.";
+    }
+  }
+
   // Accept string or number
   addNumber(num) {
     if (!isNumber(num)) {
       throw new Error(`addNumber() only accepts number inputs, got: ${num}`);
     }
 
-    this.isCleared = false;
-    this.expression = removeLeadingChars("0", this.expression + num);
+    const expressionWithoutLeadingZeroes = removeLeadingChars(
+      "0",
+      this.expression + num
+    );
+    if (expressionWithoutLeadingZeroes[0] === ".") {
+      this.expression = `0${expressionWithoutLeadingZeroes}`;
+    } else {
+      this.expression = expressionWithoutLeadingZeroes;
+    }
   }
 
   clear() {
     this.value = null;
     this.expression = "";
-    this.isCleared = true;
   }
 
   lastExpressionChar() {
@@ -235,7 +255,7 @@ export class Calculator {
 
   canAddOperator() {
     const lastChar = this.lastExpressionChar();
-    return (!this.isCleared && isNumber(lastChar)) || lastChar === ")";
+    return (!this.isCleared() && isNumber(lastChar)) || lastChar === ")";
   }
 
   hasEvenParens() {

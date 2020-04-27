@@ -124,7 +124,7 @@ const calculatorActions = [
     symbol: ".",
     description: "add a decimal point to the input",
     classNames: "text-gray-700",
-    func: "noop",
+    func: "point",
     args: null,
   },
   {

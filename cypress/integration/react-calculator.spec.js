@@ -58,3 +58,8 @@ it("does not add operators if there is not a preceding operand", () => {
   inputSequence("add", "subtract", "divide", "multiply");
   assertValue("")
 })
+
+it.only("can work with point numbers", () => {
+  inputSequence("point", 1, "add", "point", 2, "equals")
+  assertValue(0.1 + 0.2)
+})
