@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Calculator } from "./Calculator";
+import { RulerIcon } from "./RulerIcon";
 
 const Styles = {
   ActionButton:
@@ -200,7 +201,10 @@ export const CalculatorContainer = () => {
         <div className="h-16 w-full flex flex-row justify-between bg-gray-200 px-8 text-gray-600">
           <div className="flex flex-row items-center space-x-4">
             <div className="cursor-pointer uppercase">History</div>
-            <p className="cursor-pointer">Ru</p>
+            <RulerIcon
+              className="cursor-pointer h-6 w-6 text-gray-600"
+              onClick={() => console.log("Ruler clicked")}
+            />
             <p className="cursor-pointer">Signs</p>
           </div>
           <div
