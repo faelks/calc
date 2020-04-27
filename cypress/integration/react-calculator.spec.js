@@ -59,7 +59,7 @@ it("does not add operators if there is not a preceding operand", () => {
   assertValue("")
 })
 
-it.only("can work with point numbers", () => {
+it("can work with point numbers", () => {
   inputSequence("point", 1, "add", "point", 2, "equals")
-  assertValue(0.1 + 0.2)
+  assertValue(0.3)
 })

@@ -127,7 +127,11 @@ export class Calculator {
           "/": (a, b) => a / b,
         };
 
-        stack.push(operatorToFunctionMap[token](b, a));
+        const fpResult = operatorToFunctionMap[token](b, a);
+        // Get more accurate results for floating point values,
+        // avoids results like 0.1 + 0.2 -> 0.30000000000001
+        const fixedResult = Math.round(fpResult * 10e14) / 10e14;
+        stack.push(fixedResult);
       }
     }
 
