@@ -169,6 +169,7 @@ export const CalculatorContainer = () => {
         <div className="h-48 w-full bg-gray-300 flex justify-center items-center">
           <input
             type="text"
+            data-testid="calculator-input"
             autoFocus
             className="w-full bg-gray-300 h-24 text-4xl text-blue-500 outline-none text-right p-4"
             value={input}
@@ -189,6 +190,7 @@ export const CalculatorContainer = () => {
           {calculatorActions.map((action) => (
             <div
               key={action.name}
+              data-testid={`action-${action.name}`}
               className={Styles.ActionButton}
               title={action.description}
               onClick={() => handleAction(action)}
