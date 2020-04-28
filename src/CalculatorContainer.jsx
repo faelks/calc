@@ -177,12 +177,16 @@ const calculator = new Calculator();
 export const CalculatorContainer = () => {
   const [input, setInput] = useState("");
   const [previewValue, setPreviewValue] = useState("");
+  const [isEvaluated, setIsEvaluated] = useState(false);
 
   const handleAction = (action) => {
     calculator[action.func](action.args);
 
     if (action.name !== "equals") {
       calculator.evaluate();
+      setIsEvaluated(false);
+    } else {
+      setIsEvaluated(true);
     }
     
     setInput(calculator.expression);
@@ -201,7 +205,7 @@ export const CalculatorContainer = () => {
             type="text"
             data-testid="calculator-input"
             autoFocus
-            className="w-full flex-grow bg-transparent h-24 text-4xl text-blue-500 outline-none text-right px-8"
+            className={`w-full flex-grow bg-transparent h-24 text-4xl text-${isEvaluated ? "blue-500" : "black"} outline-none text-right px-8`}
             value={input}
             onChange={() => {}}
             onKeyDown={handleManualInput}
