@@ -215,8 +215,7 @@ export class Calculator {
   // expression with the output of the evaluation.
   equals() {
     this.evaluate();
-    this.expression = `${this.value}`;
-    this.value = null;
+    this.expression = `${this.value || ""}`;
   }
 
   // Add one of the basic operators [+, -, x, /, %]

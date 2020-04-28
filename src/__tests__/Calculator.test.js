@@ -90,3 +90,9 @@ it("does not add redundant leading zeroes", () => {
 
   expect(calc.getExpression()).toEqual("0");
 })
+
+it("does nothing when evaluating when expression is empty", () => {
+  calc.equals();
+
+  expect(calc.getExpression()).toEqual("");
+})
