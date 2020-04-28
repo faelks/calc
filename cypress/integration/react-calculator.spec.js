@@ -11,6 +11,13 @@ function assertValue(expected) {
   );
 }
 
+function assertPreviewValue(expected) {
+  cy.get("[data-testid='calculator-preview-value']").should(
+    "have.text",
+    `${expected}`
+  );
+}
+
 beforeEach(() => {
   cy.visit("/");
 });
@@ -46,20 +53,25 @@ it("applies rules of precedence", () => {
 
 it("can be cleared", () => {
   inputSequence(1, 2, 3, "clear");
-  assertValue("")
+  assertValue("");
 });
 
 it("can convert values to percentages", () => {
-  inputSequence(4,2,"percentage","equals");
+  inputSequence(4, 2, "percentage", "equals");
   assertValue(0.42);
-})
+});
 
 it("does not add operators if there is not a preceding operand", () => {
   inputSequence("add", "subtract", "divide", "multiply");
-  assertValue("")
-})
+  assertValue("");
+});
 
 it("can work with point numbers", () => {
-  inputSequence("point", 1, "add", "point", 2, "equals")
-  assertValue(0.3)
-})
+  inputSequence("point", 1, "add", "point", 2, "equals");
+  assertValue(0.3);
+});
+
+it("the expression is evaluated on every action and result displayed under input", () => {
+  inputSequence(1, "add", 1);
+  assertPreviewValue(2);
+});

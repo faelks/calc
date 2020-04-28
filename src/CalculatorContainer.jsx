@@ -167,7 +167,7 @@ const calculatorActions = [
     symbol: "=",
     description: "calculate the result of the input expression",
     classNames: "text-white bg-blue-500 border-b",
-    func: "evaluate",
+    func: "equals",
     args: null,
   },
 ];
@@ -176,10 +176,17 @@ const calculator = new Calculator();
 
 export const CalculatorContainer = () => {
   const [input, setInput] = useState("");
+  const [previewValue, setPreviewValue] = useState("");
 
   const handleAction = (action) => {
     calculator[action.func](action.args);
+
+    if (action.name !== "equals") {
+      calculator.evaluate();
+    }
+    
     setInput(calculator.expression);
+    setPreviewValue(calculator.value);
   };
 
   const handleManualInput = (e) => {
@@ -189,16 +196,22 @@ export const CalculatorContainer = () => {
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-800">
       <div className="h-160 w-96 flex flex-col border-2 border-gray-800 bg-white shadow-md">
-        <div className="h-56 w-full bg-gray-200 flex justify-center items-center">
+        <div className="h-56 w-full bg-gray-200 flex flex-col justify-center items-center">
           <input
             type="text"
             data-testid="calculator-input"
             autoFocus
-            className="w-full h-full bg-transparent h-24 text-4xl text-blue-500 outline-none text-right px-8"
+            className="w-full flex-grow bg-transparent h-24 text-4xl text-blue-500 outline-none text-right px-8"
             value={input}
             onChange={() => {}}
             onKeyDown={handleManualInput}
-          ></input>
+          />
+          <p
+            className="w-full h-16 text-right px-8 text-2xl text-gray-500 font-thin"
+            data-testid="calculator-preview-value"
+          >
+            {previewValue}
+          </p>
         </div>
         <div className="h-16 w-full flex flex-row justify-between bg-gray-200 px-8 text-gray-600">
           <div className="flex flex-row items-center space-x-6">

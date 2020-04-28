@@ -156,15 +156,22 @@ export class Calculator {
       }
     }
 
-    this.value = this.evaluatePostfix([...postfixExpression]);
+    const expressionValue = this.evaluatePostfix([...postfixExpression]);
 
-    if (!this.value) {
+    if (!expressionValue) {
       console.log(
         `Could not evaluate expression: ${this.expression} tokens: [${tokens}] postfix: [${postfixExpression}]`
       );
+      this.value = null;
+    } else {
+      this.value = expressionValue;
     }
+  }
 
+  equals() {
+    this.evaluate();
     this.expression = `${this.value}`;
+    this.value = null;
   }
 
   add() {
