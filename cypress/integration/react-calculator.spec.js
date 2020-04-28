@@ -4,7 +4,7 @@ function inputSequence(...actionIds) {
   }
 }
 
-function assertInputAttribute(expected, attribute = "value") {
+function assertInputAttribute(expected, attribute = "text") {
   cy.get("[data-testid='calculator-input']").should(
     `have.${attribute}`,
     `${expected}`

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Calculator } from "./Calculator";
+import { isNumber } from "./utils";
 import { ReactComponent as RemoveIcon } from "./assets/remove-icon-30x30.svg";
 import { ReactComponent as RulerIcon } from "./assets/ruler-icon-30x30.svg";
 import { ReactComponent as MathSignsIcon } from "./assets/math-signs-30x30.svg";
@@ -175,7 +176,7 @@ const calculatorActions = [
 const calculator = new Calculator();
 
 export const CalculatorContainer = () => {
-  const [input, setInput] = useState("");
+  const [inputTokens, setInputTokens] = useState([]);
   const [previewValue, setPreviewValue] = useState("");
   const [isEvaluated, setIsEvaluated] = useState(false);
 
@@ -189,7 +190,7 @@ export const CalculatorContainer = () => {
       setIsEvaluated(true);
     }
 
-    setInput(calculator.getExpression());
+    setInputTokens(calculator.getTokens());
     setPreviewValue(calculator.getValue());
   };
 
@@ -197,21 +198,31 @@ export const CalculatorContainer = () => {
     console.log(e.type, e.target, e.key);
   };
 
+  const inputTextColourClass = isEvaluated ? "text-blue-500" : "text-black";
   return (
     <div className="w-screen h-screen flex flex-col items-center justify-center bg-gray-800">
       <div className="h-160 w-96 flex flex-col border-2 border-gray-800 bg-white shadow-md">
         <div className="h-56 w-full bg-gray-200 flex flex-col justify-center items-center">
-          <input
-            type="text"
+          <div
             data-testid="calculator-input"
-            autoFocus
-            className={`w-full flex-grow bg-transparent h-24 text-4xl text-${
-              isEvaluated ? "blue-500" : "black"
-            } outline-none text-right px-8`}
-            value={input}
-            onChange={() => {}}
-            onKeyDown={handleManualInput}
-          />
+            className={`w-full px-8 flex-grow flex flew-row flex-wrap justify-end items-center text-4xl ${inputTextColourClass}`}
+          >
+            {inputTokens.map((token, i) => {
+              const tokenTextColor = isNumber(token) ? "" : "text-blue-500";
+              return (
+                <span key={i} className={tokenTextColor}>
+                  {token}
+                </span>
+              );
+            })}
+            <input
+              type="text"
+              autoFocus
+              className={`bg-transparent text-4xl w-1 outline-none text-right`}
+              onChange={() => {}}
+              onKeyDown={handleManualInput}
+            />
+          </div>
           <p
             className="w-full h-16 text-right px-8 text-2xl text-gray-500 font-thin"
             data-testid="calculator-preview-value"

@@ -47,7 +47,7 @@ export class Calculator {
   }
 
   getTokens() {
-    return this.parseExpression();
+    return this.parseExpression({ parseSpecial: false });
   }
 
   getLastToken() {
