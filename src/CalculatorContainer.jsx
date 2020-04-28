@@ -191,8 +191,6 @@ export const CalculatorContainer = () => {
 
     setInput(calculator.getExpression());
     setPreviewValue(calculator.getValue());
-
-    console.log(calculator.parseExpression());
   };
 
   const handleManualInput = (e) => {

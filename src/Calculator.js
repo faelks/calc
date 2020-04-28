@@ -202,7 +202,7 @@ export class Calculator {
     const expressionValue = this.evaluatePostfix([...postfixExpression]);
 
     if (!expressionValue) {
-      console.log(
+      console.error(
         `Could not evaluate expression: ${this.expression} tokens: [${tokens}] postfix: [${postfixExpression}]`
       );
       this.value = null;
