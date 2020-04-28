@@ -34,14 +34,14 @@ it("can add numbers", () => {
 });
 
 it.each`
-  method        | a                  | b             | result
-  ${"add"}      | ${someNumber}      | ${someNumber} | ${someNumber + someNumber}
-  ${"subtract"} | ${someNumber + 10} | ${10}         | ${someNumber}
+  operatorId    | a                  | b             | result
+  ${"plus"}     | ${someNumber}      | ${someNumber} | ${someNumber + someNumber}
+  ${"minus"}   | ${someNumber + 10} | ${10}         | ${someNumber}
   ${"multiply"} | ${someNumber}      | ${5}          | ${someNumber * 5}
   ${"divide"}   | ${someNumber}      | ${3}          | ${someNumber / 3}
-`(`can perform $method`, ({ method, a, b, result }) => {
+`(`can perform evaluation with $operatorId`, ({ operatorId, a, b, result }) => {
   calc.addNumber(a);
-  calc[method]();
+  calc.addOperator(operatorId);
   calc.addNumber(b);
   calc.evaluate();
   expect(calc.getValue()).toEqual(result);
@@ -50,7 +50,7 @@ it.each`
 it("can use parens", () => {
   calc.addParenthesis();
   calc.addNumber(someNumber);
-  calc.add();
+  calc.addOperator("plus")
   calc.addNumber(1);
   calc.addParenthesis();
   calc.addParenthesis();
@@ -64,7 +64,7 @@ it("can use parens", () => {
 
 it("can apply the special percentage action", () => {
   calc.addNumber(someNumber);
-  calc.percent();
+  calc.addOperator("percent");
 
   expect(calc.getExpression()).toEqual(`${someNumber}%`);
 

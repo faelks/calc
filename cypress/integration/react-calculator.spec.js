@@ -76,7 +76,7 @@ it("the expression is evaluated on every action and result displayed under input
   assertPreviewValue(2);
 });
 
-it.only("displays the result in blue text after evaluating an expression", () => {
+it("displays the result in blue text after evaluating an expression", () => {
   assertInputAttribute("text-black", "class");
   inputSequence(4, "multiply", 5, "equals");
   assertInputAttribute("text-blue-500", "class");

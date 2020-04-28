@@ -1,5 +1,33 @@
 import { removeLeadingChars, isNumber, isOperator } from "./utils";
 
+// A basic calculator, has a fixed amount of actions that can be performed
+// which map to action buttons like [+, -, /, x, %, =, [0-9], C]. Every time
+// an action is performed the expression is updated.
+
+// expression: the string input which can be evaluated to get a value
+// tokens: the output of parsing the expression string
+// value: the current value of the expression if interpreted
+
+// When displaying the  either use 'getExpression()' or
+// 'getTokens()'
+
+// Public API
+// isCleared()
+// getExpression()
+// getValue()
+// getTokens()
+
+export const OPERATOR = {
+  plus: "+",
+  minus: "-",
+  multiply: "x",
+  divide: "/",
+  percent: "%",
+  point: ".",
+  leftParen: "(",
+  rightParen: ")",
+};
+
 export class Calculator {
   constructor() {
     this.expression = "";
@@ -16,6 +44,15 @@ export class Calculator {
 
   getValue() {
     return this.value;
+  }
+
+  getTokens() {
+    return this.parseExpression();
+  }
+
+  getLastToken() {
+    const tokens = this.getTokens();
+    return tokens[tokens.length - 1];
   }
 
   operatorGreaterThan(a, b) {
@@ -174,32 +211,25 @@ export class Calculator {
     this.value = null;
   }
 
-  add() {
-    if (this.canAddOperator()) {
-      this.expression += "+";
-    }
-  }
+  addOperator(operatorId) {
+    const operator = OPERATOR[operatorId];
 
-  subtract() {
-    if (this.canAddOperator()) {
-      this.expression += "-";
+    if (!operator) {
+      throw new Error(`Can't add unknown operator ${operatorId}`);
     }
-  }
 
-  multiply() {
-    if (this.canAddOperator()) {
-      this.expression += "x";
+    if (
+      this.canAddOperator() &&
+      [
+        OPERATOR.plus,
+        OPERATOR.minus,
+        OPERATOR.multiply,
+        OPERATOR.divide,
+        OPERATOR.percent,
+      ].includes(operator)
+    ) {
+      this.expression += operator;
     }
-  }
-
-  divide() {
-    if (this.canAddOperator()) {
-      this.expression += "/";
-    }
-  }
-
-  percent() {
-    this.expression += "%";
   }
 
   negate() {
@@ -228,7 +258,7 @@ export class Calculator {
       return;
     }
 
-    const lastChar = this.lastExpressionChar();
+    const lastChar = this.getLastToken();
     if (isNumber(lastChar)) {
       this.expression += ".";
     } else if (isOperator(lastChar) || lastChar === "(") {
@@ -260,13 +290,9 @@ export class Calculator {
     this.expression = "";
   }
 
-  lastExpressionChar() {
-    return this.expression[this.expression.length - 1];
-  }
-
   canAddOperator() {
-    const lastChar = this.lastExpressionChar();
-    return (!this.isCleared() && isNumber(lastChar)) || lastChar === ")";
+    const lastToken = this.getLastToken();
+    return (!this.isCleared() && isNumber(lastToken)) || lastToken === ")";
   }
 
   hasEvenParens() {
@@ -284,8 +310,8 @@ export class Calculator {
   }
 
   addParenthesis() {
-    const lastChar = this.lastExpressionChar();
-    if (isNumber(lastChar) || lastChar === ")") {
+    const lastToken = this.getLastToken();
+    if (isNumber(lastToken) || lastToken === ")") {
       if (this.hasEvenParens()) {
         this.expression += "x(";
       } else {

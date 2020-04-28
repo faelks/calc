@@ -95,8 +95,8 @@ const calculatorActions = [
     symbol: "%",
     description: "convert the current value to percentage form",
     classNames: "text-blue-500",
-    func: "percent",
-    args: null,
+    func: "addOperator",
+    args: "percent",
   },
   {
     name: "9",
@@ -135,32 +135,32 @@ const calculatorActions = [
     symbol: "/",
     description: "divide the current value",
     classNames: "text-blue-500",
-    func: "divide",
-    args: null,
+    func: "addOperator",
+    args: "divide",
   },
   {
     name: "multiply",
     symbol: "x",
     description: "multiply the current value",
     classNames: "text-blue-500",
-    func: "multiply",
-    args: null,
+    func: "addOperator",
+    args: "multiply",
   },
   {
     name: "subtract",
     symbol: "-",
     description: "subtract from the current value",
     classNames: "text-blue-500",
-    func: "subtract",
-    args: null,
+    func: "addOperator",
+    args: "minus",
   },
   {
     name: "add",
     symbol: "+",
     description: "add to the current value",
     classNames: "text-blue-500",
-    func: "add",
-    args: null,
+    func: "addOperator",
+    args: "plus",
   },
   {
     name: "equals",
@@ -188,9 +188,11 @@ export const CalculatorContainer = () => {
     } else {
       setIsEvaluated(true);
     }
-    
-    setInput(calculator.expression);
-    setPreviewValue(calculator.value);
+
+    setInput(calculator.getExpression());
+    setPreviewValue(calculator.getValue());
+
+    console.log(calculator.parseExpression());
   };
 
   const handleManualInput = (e) => {
@@ -205,7 +207,9 @@ export const CalculatorContainer = () => {
             type="text"
             data-testid="calculator-input"
             autoFocus
-            className={`w-full flex-grow bg-transparent h-24 text-4xl text-${isEvaluated ? "blue-500" : "black"} outline-none text-right px-8`}
+            className={`w-full flex-grow bg-transparent h-24 text-4xl text-${
+              isEvaluated ? "blue-500" : "black"
+            } outline-none text-right px-8`}
             value={input}
             onChange={() => {}}
             onKeyDown={handleManualInput}
