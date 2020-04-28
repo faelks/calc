@@ -82,3 +82,11 @@ it("can apply the negate operation", () => {
   calc.evaluate();
   expect(calc.getValue()).toEqual(-someNumber);
 });
+
+it("does not add redundant leading zeroes", () => {
+  calc.addNumber(0);
+  calc.addNumber(0);
+  calc.addNumber(0);
+
+  expect(calc.getExpression()).toEqual("0");
+})

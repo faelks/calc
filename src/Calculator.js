@@ -67,11 +67,17 @@ export class Calculator {
     return operatorPrecedenceMap[a] > operatorPrecedenceMap[b];
   }
 
-  parseExpression({ translateSpecial } = { translateSpecial: true }) {
+  parseExpression(
+    { translateSpecial, overrideExpression } = {
+      translateSpecial: true,
+      overrideExpression: null,
+    }
+  ) {
+    const expression = overrideExpression || this.expression;
     const tokens = [];
     let current = "";
 
-    for (let char of this.expression) {
+    for (let char of expression) {
       if (isNumber(char) || char === ".") {
         current += char;
       } else {
@@ -205,12 +211,15 @@ export class Calculator {
     }
   }
 
+  // Evaluates the current expression and replaces the current
+  // expression with the output of the evaluation.
   equals() {
     this.evaluate();
     this.expression = `${this.value}`;
     this.value = null;
   }
 
+  // Add one of the basic operators [+, -, x, /, %]
   addOperator(operatorId) {
     const operator = OPERATOR[operatorId];
 
@@ -268,21 +277,18 @@ export class Calculator {
     }
   }
 
-  // Accept string or number
   addNumber(num) {
     if (!isNumber(num)) {
       throw new Error(`addNumber() only accepts number inputs, got: ${num}`);
     }
 
-    const expressionWithoutLeadingZeroes = removeLeadingChars(
-      "0",
-      this.expression + num
+    const tokens = this.parseExpression({
+      overrideExpression: this.expression + num,
+    });
+    const tokensWithParsedNumbers = tokens.map((t) =>
+      isNumber(t) ? Number.parseFloat(t) : t
     );
-    if (expressionWithoutLeadingZeroes[0] === ".") {
-      this.expression = `0${expressionWithoutLeadingZeroes}`;
-    } else {
-      this.expression = expressionWithoutLeadingZeroes;
-    }
+    this.expression = tokensWithParsedNumbers.join("");
   }
 
   clear() {
